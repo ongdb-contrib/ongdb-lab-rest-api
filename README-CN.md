@@ -23,6 +23,12 @@ DELETE（DELETE）：从服务器删除资源。
 - 接口参数的接收和返回数据的格式均参考HTTP API格式【参考HTTP.md文件】
 - 长连接底层不可以使用HTTP API交互，必须使用BOLT协议
 
+- 在请求参数中使用密码认证
+```
+"auth-service-user":"neo4j"
+"auth-service-password":"123456"
+```
+
 ## LUCENE语法
 1、基础的查询语法，关键词查询：
 

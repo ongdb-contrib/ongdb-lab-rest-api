@@ -62,9 +62,10 @@ public class ReadController {
         return result;
     }
 
-    @RequestMapping(value = "/h/task/query", method = RequestMethod.GET)
-    @ResponseBody
-    public Result taskQuery() {
+    @RequestMapping(value = "/h/task/query/{auth}", method = RequestMethod.GET)
+    public Result taskQuery(@PathVariable("auth") String auth) {
+        // AUTH
+        System.out.println(auth);
         return dataService.taskQuery();
     }
 

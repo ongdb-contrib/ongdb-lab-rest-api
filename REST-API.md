@@ -7,6 +7,8 @@ GET /ongdb/read/hello
 ```
 POST /ongdb/read/d/transaction/commit
 {
+    "auth-service-user":"neo4j"
+    "auth-service-password":"123456",
     "statements": [
         {
             "statement": "MATCH (n) RETURN id(n) AS id,PROPERTIES(n) AS properties LIMIT 1;"
@@ -39,6 +41,8 @@ POST /ongdb/read/d/transaction/commit
 ```
 POST /ongdb/read/d/transaction/commit
 {
+    "auth-service-user":"neo4j"
+    "auth-service-password":"123456",
     "statements": [
         {
             "statement": "MATCH (n) RETURN id(n) AS id,PROPERTIES(n) AS properties LIMIT 1;"
@@ -72,6 +76,8 @@ POST /ongdb/read/d/transaction/commit
 ```
 POST /ongdb/read/d/transaction/commit
 {
+    "auth-service-user":"neo4j"
+    "auth-service-password":"123456"
     "statements": [
         {
             "statement": "MATCH (n) RETURN n LIMIT 1;"
@@ -124,6 +130,8 @@ POST /ongdb/read/d/transaction/commit
 ```
 POST /ongdb/read/d/transaction/commit
 {
+    "auth-service-user":"neo4j"
+    "auth-service-password":"123456"
     "statements": [
         {
             "statement": "MATCH p=(n)-[]-(),p2=(m)-[]-() RETURN p,p2 LIMIT 1;"
@@ -266,13 +274,15 @@ POST /ongdb/read/d/transaction/commit
 ```
 - 查询后台正在运行的task
 ```
-GET /ongdb/read/h/task/query
+GET /ongdb/read/h/task/query/auth-service-user=neo4j,auth-service-password=123456
 ```
 # WRITE CYPHER
 - 创建索引约束
 ```
 POST /ongdb/write/d/transaction/commit
 {
+    "auth-service-user":"neo4j",
+    "auth-service-password":"123456",
     "statements": [
         {
             "statement": "CREATE CONSTRAINT ON (n:TASKRESULTNODE) ASSERT (n.taskId, n.SOURCE,n.TARGET,n.AMOUNT,n.DATE) IS NODE KEY"
@@ -285,6 +295,8 @@ POST /ongdb/write/d/transaction/commit
 ```
 POST /ongdb/write/d/transaction/commit/task
 {
+    "auth-service-user":"neo4j",
+    "auth-service-password":"123456",
     "statements": [
         {
             "statement": "MATCH p0 = (n0:Entity) MATCH p1 = (n0)<-[:SERVE{CLASS:'GUAR'}]-(n1:Entity)<-[:SERVE{CLASS:'GUAR'}]-(n2:Entity)<-[:SERVE{CLASS:'GUAR'}]-(n3:Entity)<-[:SERVE{CLASS:'GUAR'}]-(n4:Entity) WHERE ID(n0) = 4964691 AND n0 <> n1 AND n0 <> n2 AND n0 <> n3 AND n1 <> n2 AND n1 <> n3 AND n2 <> n3 AND n0 <> n4 AND n1 <> n4 AND n2 <> n4 AND n3 <> n4 AND ALL (r IN RELATIONSHIPS(p1) WHERE r.AMOUNT IS NOT NULL) AND ALL (nn IN NODES(p1) WHERE (nn.IS_FIN_COMP IS NULL)) WITH RELATIONSHIPS(p1) AS rr UNWIND rr AS r WITH DISTINCT ID(STARTNODE(r)) AS SOURCE, ID(ENDNODE(r)) AS TARGET, r.AMOUNT AS AMOUNT, r.RELEASE_DATE AS DATE MERGE (n:TASKRESULTNODE {taskId:'yc-m-task-1-关系网络任务',SOURCE:3,TARGET:2,AMOUNT:1020,DATE:20200531}) return n
