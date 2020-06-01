@@ -6,9 +6,8 @@ package data.lab.ongdb.inter;
  */
 
 import data.lab.ongdb.etl.common.CRUD;
+import data.lab.ongdb.model.AuthUser;
 import data.lab.ongdb.result.Result;
-
-import java.util.List;
 
 /**
  * @author Yc-Ma
@@ -18,26 +17,29 @@ import java.util.List;
  */
 public interface Inter {
     /**
-     * @param
+     * @param authUser:校验用户
+     * @param cypher:运行只读CYPHER
+     * @param crud:操作类型标记
      * @return
      * @Description: TODO(支持只读CYPHER - 返回属性信息必须显式指定)
      */
-    Result readAutoCommitCypher(String cypher, CRUD crud);
+    Result readAutoCommitCypher(AuthUser authUser, String cypher, CRUD crud);
 
     /**
+     * @param authUser:校验用户
      * @param cypher:要提交任务的CYPHER
      * @param taskId:任务ID-每个CYPHER不可重复-用户自行定义尽量复杂
      * @return
      * @Description: TODO(支持任务提交并写入数据)
      */
-    Result writeAutoCommitCypherTask(String cypher, String taskId);
+    Result writeAutoCommitCypherTask(AuthUser authUser, String cypher, String taskId);
 
     /**
-     * @param
+     * @param authUser:校验用户
      * @return
      * @Description: TODO(查询后台任务)
      */
-    Result taskQuery();
+    Result readTaskQuery(AuthUser authUser);
 }
 
 

@@ -1,5 +1,5 @@
 server:
-  port: 7024
+  port: 7425
   servlet:
     context-path: /ongdb
   compression:

@@ -7,12 +7,13 @@ package data.lab.ongdb.services;
 
 import com.alibaba.fastjson.JSONObject;
 import data.lab.ongdb.etl.common.CRUD;
-import data.lab.ongdb.etl.common.NeoAccessor;
 import data.lab.ongdb.etl.compose.NeoComposer;
 import data.lab.ongdb.http.extra.HttpProxyRequest;
 import data.lab.ongdb.http.register.OngdbHeartBeat;
 import data.lab.ongdb.inter.Inter;
 
+import data.lab.ongdb.model.AuthUser;
+import data.lab.ongdb.register.Register;
 import data.lab.ongdb.result.Result;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,24 +31,44 @@ public class ServiceImpl implements Inter {
     private final static Logger LOGGER = LoggerFactory.getLogger(ServiceImpl.class);
 
     /**
-     * ONgDB COMPOSER
+     * ONgDB Composer
      **/
-    private NeoComposer neoComposer = new NeoComposer();
+    private final static NeoComposer neoComposer = new NeoComposer();
 
-    private OngdbHeartBeat heartBeat = NeoAccessor.ongdbHeartBeat;
+    /**
+     * 务必不要使用HttpProxyRequest执行数据的更新写入等操作，仅仅执行读取CYPHER
+     **/
 
     @Override
-    public Result readAutoCommitCypher(String cypher, CRUD crud) {
-        JSONObject result = neoComposer.execute(cypher, crud);
-        return new Result(200, result);
+    public Result readAutoCommitCypher(AuthUser authUser, String cypher, CRUD crud) {
+        if (Register.isRegisterOk(authUser)) {
+            JSONObject result = new JSONObject();
+            try {
+                result = neoComposer.execute(cypher, crud);
+            } catch (Exception e) {
+                return new Result(new String[]{e.getMessage(), result.toJSONString()}, Result.ErrorCode.COMMIT_NO.getCode());
+            }
+            return new Result(200, result);
+        } else {
+            return new Result(new String[]{"Auth failed!"}, Result.ErrorCode.AUTH_NO.getCode());
+        }
     }
 
     @Override
-    public Result writeAutoCommitCypherTask(String cypher, String taskId) {
-        cypher = cypher.replace("'", "\\'");
-        String taskCypher = "CALL apoc.periodic.submit('" + taskId + "','" + cypher + "')";
-        JSONObject result = neoComposer.execute(taskCypher, CRUD.MERGE);
-        return new Result(200, result);
+    public Result writeAutoCommitCypherTask(AuthUser authUser, String cypher, String taskId) {
+        if (Register.isRegisterOk(authUser)) {
+            cypher = cypher.replace("'", "\\'");
+            String taskCypher = "CALL apoc.periodic.submit('" + taskId + "','" + cypher + "')";
+            JSONObject result = new JSONObject();
+            try {
+                result = neoComposer.execute(taskCypher, CRUD.MERGE_WRITE);
+            } catch (Exception e) {
+                return new Result(new String[]{e.getMessage(), result.toJSONString()}, Result.ErrorCode.COMMIT_NO.getCode());
+            }
+            return new Result(200, result);
+        } else {
+            return new Result(new String[]{"Auth failed!"}, Result.ErrorCode.AUTH_NO.getCode());
+        }
     }
 
     /**
@@ -56,15 +77,20 @@ public class ServiceImpl implements Inter {
      * @Description: TODO(查询后台任务)
      */
     @Override
-    public Result taskQuery() {
-        HttpProxyRequest proxyRequest = OngdbHeartBeat.request;
-        try {
-            String resultStr = proxyRequest.httpPost("/db/data/transaction/commit","{\"statements\": [{\"statement\": \"CALL apoc.periodic.list()\"}]}");
-            return new Result(200, JSONObject.parseObject(resultStr));
-        } catch (Exception e) {
-            return new Result(new String[]{e.getMessage()}, e.hashCode());
+    public Result readTaskQuery(AuthUser authUser) {
+        if (Register.isRegisterOk(authUser)) {
+            HttpProxyRequest proxyRequest = OngdbHeartBeat.request;
+            try {
+                String resultStr = proxyRequest.httpPost("/db/data/transaction/commit", "{\"statements\": [{\"statement\": \"CALL apoc.periodic.list()\"}]}");
+                return new Result(200, JSONObject.parseObject(resultStr));
+            } catch (Exception e) {
+                return new Result(new String[]{e.getMessage()}, e.hashCode());
+            }
+        } else {
+            return new Result(new String[]{"Auth failed!"}, Result.ErrorCode.AUTH_NO.getCode());
         }
     }
+
 }
 
 

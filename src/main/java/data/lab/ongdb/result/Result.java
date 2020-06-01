@@ -82,7 +82,12 @@ public class Result {
         /**
          * CYPHER提交失败
          */
-        COMMIT_NO(40001);
+        COMMIT_NO(40001),
+
+        /**
+         * 用户验证失败
+         */
+        AUTH_NO(40002);
 
         private int code;
 

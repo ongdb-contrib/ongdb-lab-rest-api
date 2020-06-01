@@ -8,6 +8,7 @@ package data.lab.ongdb.controller;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import data.lab.ongdb.etl.common.CRUD;
+import data.lab.ongdb.model.AuthUser;
 import data.lab.ongdb.result.Result;
 import data.lab.ongdb.services.ServiceImpl;
 import org.slf4j.Logger;
@@ -21,7 +22,7 @@ import java.util.LinkedHashMap;
 /**
  * @author Yc-Ma
  * @PACKAGE_NAME: data.lab.ongdb.controller.Controller
- * @Description: TODO
+ * @Description: TODO(包含数据的更新导入等等操作的接口在此CONTROLLER - 必须使用DRIVER中BOLT协议实现)
  * @date 2020/5/31 13:18
  */
 @Controller
@@ -57,10 +58,12 @@ public class WriteController {
             JSONObject statement = para.getJSONArray("statements").getJSONObject(0);
             String cypher = statement.getString("statement");
             String returnType = para.getString("return");
+            String user = para.getString("user");
+            String password = para.getString("password");
             if (para.containsKey("return") && CRUD.RETRIEVE_PROPERTIES.getSymbolValue().equals(returnType)) {
-                return dataService.readAutoCommitCypher(cypher, CRUD.RETRIEVE_PROPERTIES);
+                return dataService.readAutoCommitCypher(new AuthUser(user, password), cypher, CRUD.RETRIEVE_PROPERTIES);
             } else {
-                return dataService.readAutoCommitCypher(cypher, CRUD.RETRIEVE);
+                return dataService.readAutoCommitCypher(new AuthUser(user, password), cypher, CRUD.RETRIEVE);
             }
         } catch (IllegalArgumentException e) {
             result = new Result(new String[]{e.getMessage()}, e.hashCode());
@@ -79,11 +82,13 @@ public class WriteController {
         Result result = new Result(200);
         try {
             JSONArray array = para.getJSONArray("statements");
+            String user = para.getString("user");
+            String password = para.getString("password");
             for (Object object : array) {
                 LinkedHashMap statement = (LinkedHashMap) object;
                 String cypher = String.valueOf(statement.get("statement"));
                 String taskId = String.valueOf(statement.get("task-id"));
-                result = dataService.writeAutoCommitCypherTask(cypher, taskId);
+                result = dataService.writeAutoCommitCypherTask(new AuthUser(user, password), cypher, taskId);
             }
         } catch (IllegalArgumentException e) {
             result = new Result(new String[]{e.getMessage()}, e.hashCode());

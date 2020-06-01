@@ -1,6 +1,9 @@
 # ONgDB REST API
 >负责CYPHER请求的分发，负载均衡，增删改查等。
 - 接口程序默认启用http（7424）、https（7425）两个端口
+## API DOC
+- http://localhost:7424/ongdb/swagger-ui.html
+- https://localhost:7425/ongdb/swagger-ui.html
 
 ## 统一Restful接口设计
 ```
@@ -18,15 +21,16 @@ DELETE（DELETE）：从服务器删除资源。
 
 ```
 - 接口设计为主要分为READ和WRITE
-- 接口地址中/h/与/d/分别表示使用哪种底层驱动和ONgDB交互
+- 接口地址中/h/与/d/分别表示使用【HTTP API和JAVA DRIVER】底层驱动和ONgDB交互
 - 自动识别返回的节点关系属性等等信息针对性的进行统一数据封装
 - 接口参数的接收和返回数据的格式均参考HTTP API格式【参考HTTP.md文件】
 - 长连接底层不可以使用HTTP API交互，必须使用BOLT协议
-
 - 在请求参数中使用密码认证
+- 所有数据写入更新等请求必须由LEADER节点执行
+- 所有数据写入更新等请求必须由DRIVER执行【HTTP API仅仅执行一些查询任务例如查询当前运行的TASK等】
 ```
-"auth-service-user":"neo4j"
-"auth-service-password":"123456"
+"user":"neo4j"
+"password":"123456"
 ```
 
 ## LUCENE语法

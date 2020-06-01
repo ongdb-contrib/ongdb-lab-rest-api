@@ -7,7 +7,7 @@ package data.lab.ongdb.controller;
 
 import com.alibaba.fastjson.JSONObject;
 import data.lab.ongdb.etl.common.CRUD;
-import data.lab.ongdb.model.ParaJson;
+import data.lab.ongdb.model.AuthUser;
 import data.lab.ongdb.result.Result;
 import data.lab.ongdb.services.ServiceImpl;
 import org.slf4j.Logger;
@@ -16,10 +16,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.stereotype.Controller;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+
 /**
  * @author Yc-Ma
  * @PACKAGE_NAME: data.lab.ongdb.controller.Controller
- * @Description: TODO
+ * @Description: TODO(此CONTROLLER都是只读请求 - 可使用HTTP和BOLT协议)
  * @date 2020/5/31 13:18
  */
 @Controller
@@ -51,10 +54,12 @@ public class ReadController {
             JSONObject statement = para.getJSONArray("statements").getJSONObject(0);
             String cypher = statement.getString("statement");
             String returnType = para.getString("return");
+            String user = para.getString("user");
+            String password = para.getString("password");
             if (para.containsKey("return") && CRUD.RETRIEVE_PROPERTIES.getSymbolValue().equals(returnType)) {
-                return dataService.readAutoCommitCypher(cypher, CRUD.RETRIEVE_PROPERTIES);
+                return dataService.readAutoCommitCypher(new AuthUser(user, password), cypher, CRUD.RETRIEVE_PROPERTIES_READ_ONLY);
             } else {
-                return dataService.readAutoCommitCypher(cypher, CRUD.RETRIEVE);
+                return dataService.readAutoCommitCypher(new AuthUser(user, password), cypher, CRUD.RETRIEVE_READ_ONLY);
             }
         } catch (IllegalArgumentException e) {
             result = new Result(new String[]{e.getMessage()}, e.hashCode());
@@ -62,22 +67,10 @@ public class ReadController {
         return result;
     }
 
-    @RequestMapping(value = "/h/task/query/{auth}", method = RequestMethod.GET)
-    public Result taskQuery(@PathVariable("auth") String auth) {
-        // AUTH
-        System.out.println(auth);
-        return dataService.taskQuery();
-    }
-
-    /**
-     * @param
-     * @return
-     * @Description: TODO(事务自动提交)
-     */
-    @RequestMapping(value = "/h/transaction/commit", method = RequestMethod.POST)
+    @RequestMapping(value = "/h/task/query",method = RequestMethod.GET)
     @ResponseBody
-    public String hTransactionCommit(@RequestBody ParaJson userJson) {
-        return "";
+    public Result taskQuery(AuthUser authUser) {
+        return dataService.readTaskQuery(authUser);
     }
 
 }
