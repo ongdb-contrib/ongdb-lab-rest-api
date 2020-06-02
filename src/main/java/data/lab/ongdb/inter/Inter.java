@@ -5,6 +5,7 @@ package data.lab.ongdb.inter;
  *
  */
 
+import com.alibaba.fastjson.JSONObject;
 import data.lab.ongdb.etl.common.CRUD;
 import data.lab.ongdb.model.AuthUser;
 import data.lab.ongdb.result.Result;
@@ -40,6 +41,14 @@ public interface Inter {
      * @Description: TODO(查询后台任务)
      */
     Result readTaskQuery(AuthUser authUser);
+
+    /**
+     * @param authUser:校验用户
+     * @param cypherCondition:http api接口的支持的参数【/db/data/transaction/commit】
+     * @return
+     * @Description: TODO(查询后台任务)
+     */
+    Result executeManagerCypherByHttp(AuthUser authUser, JSONObject cypherCondition);
 }
 
 

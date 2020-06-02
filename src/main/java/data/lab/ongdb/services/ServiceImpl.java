@@ -91,6 +91,27 @@ public class ServiceImpl implements Inter {
         }
     }
 
+    /**
+     * @param authUser :校验用户
+     * @param cypherCondition
+     * @return
+     * @Description: TODO(查询后台任务)
+     */
+    @Override
+    public Result executeManagerCypherByHttp(AuthUser authUser, JSONObject cypherCondition) {
+        if (Register.isRegisterOk(authUser)) {
+            HttpProxyRequest proxyRequest = OngdbHeartBeat.request;
+            try {
+                String resultStr = proxyRequest.httpPost("/db/data/transaction/commit", cypherCondition.toJSONString());
+                return new Result(200, JSONObject.parseObject(resultStr));
+            } catch (Exception e) {
+                return new Result(new String[]{e.getMessage()}, e.hashCode());
+            }
+        } else {
+            return new Result(new String[]{"Auth failed!"}, Result.ErrorCode.AUTH_NO.getCode());
+        }
+    }
+
 }
 
 

@@ -16,9 +16,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.stereotype.Controller;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
-
 /**
  * @author Yc-Ma
  * @PACKAGE_NAME: data.lab.ongdb.controller.Controller
@@ -73,6 +70,26 @@ public class ReadController {
         return dataService.readTaskQuery(authUser);
     }
 
+    /**
+     * @param para
+     * @return
+     * @Description: TODO(事务自动提交)
+     */
+    @RequestMapping(value = "/h/transaction/commit", method = RequestMethod.POST)
+    @ResponseBody
+    public Result hTransactionCommit(@RequestBody JSONObject para) {
+        Result result;
+        try {
+            String user = para.getString("user");
+            String password = para.getString("password");
+            para.remove("user");
+            para.remove("password");
+            return dataService.executeManagerCypherByHttp(new AuthUser(user, password), para);
+        } catch (IllegalArgumentException e) {
+            result = new Result(new String[]{e.getMessage()}, e.hashCode());
+        }
+        return result;
+    }
 }
 
 
