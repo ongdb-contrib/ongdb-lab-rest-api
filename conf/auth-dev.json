@@ -1,23 +1,23 @@
 [
   {
     "user": "ongdb",
-    "password": "datalab%pro"
+    "password": "ongdb%dev"
   },
   {
     "user": "graph-user1",
-    "password": "datalab%pro"
+    "password": "ongdb%dev"
   },
   {
     "user": "graph-user2",
-    "password": "datalab%pro"
+    "password": "ongdb%dev"
   },
   {
     "user": "neo4j",
-    "password": "datalab%pro"
+    "password": "datalab%dev"
   },
   {
     "user": "graph-user3",
-    "password": "datalab%pro"
+    "password": "ongdb%dev"
   }
 ]
 

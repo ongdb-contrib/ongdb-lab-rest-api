@@ -28,19 +28,23 @@ public class Register {
     private final static Map<AuthUser, Driver> authUserDriverMap = new HashMap<>();
 
     private static List<AuthUser> authUserList;
+    private static Driver driver;
 
     static {
         String authStr = FileUtil.readAllLine("conf" + File.separator + "auth.json", "UTF-8");
         authUserList = JSONObject.parseArray(authStr, AuthUser.class);
-        for (AuthUser authUser : authUserList) {
-            Driver driver = BuildDriver.build(authUser.getUser(), authUser.getPassword());
-            authUserDriverMap.put(authUser, driver);
-        }
+        AuthUser defaultUser = authUserList.stream().filter(user->"neo4j".equals(user.getUser())).findFirst().get();
+        driver = BuildDriver.build(defaultUser.getUser(), defaultUser.getPassword());
+        // 取消DRIVER端用户认证
+//        for (AuthUser authUser : authUserList) {
+//            Driver authDriver = BuildDriver.build(authUser.getUser(), authUser.getPassword());
+//            authUserDriverMap.put(authUser, authDriver);
+//        }
     }
 
     public static boolean isRegisterOk(AuthUser authUser) {
         NeoAccessor.driverIsResetDriver = true;
-        NeoAccessor.driver = authUserDriverMap.get(authUser);
+        NeoAccessor.driver = authUserDriverMap.getOrDefault(authUser, driver);
         return authUserList.contains(authUser);
     }
 
