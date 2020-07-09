@@ -51,7 +51,7 @@ public class OngdbSwagger {
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
                 /*页面标题*/
-                .title("DATA LAB GRAPH DB API")
+                .title("DataLab图数据平台API服务")
                 /*创建人*/
                 .contact(new Contact("Graph Developer", "http://10.0.186.30/pages/viewpage.action?pageId=59605068", "mayc01@jsfund.cn"))
 
