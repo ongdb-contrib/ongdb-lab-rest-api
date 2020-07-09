@@ -28,7 +28,7 @@ import org.springframework.web.bind.annotation.*;
  * 支持跨源请求
  * **/
 @CrossOrigin(origins = "*", maxAge = 3600)
-@Api(value = "GraphQL",description = "执行GraphQL: /ongdb/graphiql在这个端点访问GraphQL APP")
+@Api(value = "GraphQL", description = "执行GraphQL: /ongdb/graphiql在这个端点访问GraphQL APP")
 public class GraphController {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(GraphController.class);
@@ -53,7 +53,7 @@ public class GraphController {
      */
     @RequestMapping(value = "/graphql", method = RequestMethod.POST)
     @ResponseBody
-    @ApiOperation(value = "执行数据修改的GraphQL",notes = "### POST /ongdb/graph/graphql/\n" +
+    @ApiOperation(value = "执行数据修改的GraphQL", notes = "### POST /ongdb/graph/graphql/\n" +
             "- 参数样例\n" +
             "- GraphQL APP\n" +
             "```\n" +
@@ -100,7 +100,7 @@ public class GraphController {
      */
     @RequestMapping(value = "/graphql/experimental", method = RequestMethod.POST)
     @ResponseBody
-    @ApiOperation(value = "执行数据查询的GraphQL和定义Schema的GraphQL",notes = "- 参数样例\n" +
+    @ApiOperation(value = "执行数据查询的GraphQL", notes = "- 参数样例\n" +
             "- GraphQL APP\n" +
             "```\n" +
             "graphql: \n" +
@@ -133,13 +133,67 @@ public class GraphController {
     /**
      * @param
      * @return
+     * @Description: TODO(创建GraphQL Schema)
+     * {
+     * "query": "GraphQL",
+     * "variables": {
+     * "var1": "vakue",
+     * "var2": "vakue"
+     * }
+     * }
+     */
+    @RequestMapping(value = "/graphql/idl", method = RequestMethod.POST)
+    @ResponseBody
+    @ApiOperation(value = "创建GraphQL Schema", notes = "- 参数样例\n" +
+            "- GraphQL APP\n" +
+            "```\n" +
+            "graphql: \n" +
+            "type Movie {\n" +
+            "  title: String!\n" +
+            "  released: Int\n" +
+            "  actors: [Person] @relation(name: \"ACTED_IN\", direction: IN)\n" +
+            "}\n" +
+            "type Person {\n" +
+            "  name: String!\n" +
+            "  born: Int\n" +
+            "  movies: [Movie] @relation(name: \"ACTED_IN\")\n" +
+            "}\n" +
+            "\n" +
+            "query variables:\n" +
+            "{\n" +
+            "  \"username\":\"ongdb\",\n" +
+            "  \"password\":\"ongdb%dev\"\n" +
+            "}\n" +
+            "```\n" +
+            "- HTTP APP\n" +
+            "```\n" +
+            "{\n" +
+            "    \"query\": \"type Movie {  title: String!  released: Int  actors: [Person] @relation(name: \\\"ACTED_IN\\\", direction: IN)}type Person {  name: String!  born: Int  movies: [Movie] @relation(name: \\\"ACTED_IN\\\")}\",\n" +
+            "    \"variables\": {\n" +
+            "        \"username\": \"ongdb\",\n" +
+            "        \"password\": \"ongdb%dev\"\n" +
+            "    }\n" +
+            "}\n" +
+            "```\n" +
+            "- 返回值\n" +
+            "```\n" +
+            "{\"Movie\":{\"type\":\"Movie\",\"description\":null,\"properties\":{\"title\":{\"fieldName\":\"title\",\"type\":{\"name\":\"String\",\"array\":false,\"nonNull\":1,\"enum\":false,\"inputType\":false,\"scalar\":false,\"basic\":true},\"id\":true,\"indexed\":false,\"cypher\":null,\"defaultValue\":null,\"unique\":false,\"enum\":false,\"parameters\":null,\"description\":null,\"graphQLId\":false,\"computed\":false,\"idProperty\":true},\"released\":{\"fieldName\":\"released\",\"type\":{\"name\":\"Int\",\"array\":false,\"nonNull\":0,\"enum\":false,\"inputType\":false,\"scalar\":false,\"basic\":true},\"id\":false,\"indexed\":false,\"cypher\":null,\"defaultValue\":null,\"unique\":false,\"enum\":false,\"parameters\":null,\"description\":null,\"graphQLId\":false,\"computed\":false,\"idProperty\":false}},\"relationships\":{\"actors\":{\"fieldName\":\"actors\",\"type\":\"ACTED_IN\",\"label\":\"Person\",\"out\":false,\"multi\":true,\"cypher\":null,\"parameters\":null,\"description\":null,\"nonNull\":0}},\"labels\":[],\"interface\":false},\"Person\":{\"type\":\"Person\",\"description\":null,\"properties\":{\"name\":{\"fieldName\":\"name\",\"type\":{\"name\":\"String\",\"array\":false,\"nonNull\":1,\"enum\":false,\"inputType\":false,\"scalar\":false,\"basic\":true},\"id\":true,\"indexed\":false,\"cypher\":null,\"defaultValue\":null,\"unique\":false,\"enum\":false,\"parameters\":null,\"description\":null,\"graphQLId\":false,\"computed\":false,\"idProperty\":true},\"born\":{\"fieldName\":\"born\",\"type\":{\"name\":\"Int\",\"array\":false,\"nonNull\":0,\"enum\":false,\"inputType\":false,\"scalar\":false,\"basic\":true},\"id\":false,\"indexed\":false,\"cypher\":null,\"defaultValue\":null,\"unique\":false,\"enum\":false,\"parameters\":null,\"description\":null,\"graphQLId\":false,\"computed\":false,\"idProperty\":false}},\"relationships\":{\"movies\":{\"fieldName\":\"movies\",\"type\":\"ACTED_IN\",\"label\":\"Movie\",\"out\":true,\"multi\":true,\"cypher\":null,\"parameters\":null,\"description\":null,\"nonNull\":0}},\"labels\":[],\"interface\":false}}\n" +
+            "```\n")
+    public String executeGraphQlIdl(@RequestBody String para) {
+        AuthUser authUser = getAuthUser(para);
+        return dataService.executeGraphQLIdl(authUser, para);
+    }
+
+    /**
+     * @param
+     * @return
      * @Description: TODO(封装校验的用户对象)
      */
     private AuthUser getAuthUser(String para) {
         JSONObject paraObj = JSONObject.parseObject(para);
         JSONObject authObj = paraObj.getJSONObject("variables");
-        String username = authObj.getString("username");
-        String password = authObj.getString("password");
+        String username = authObj.containsKey("username") ? authObj.getString("username") : null;
+        String password = authObj.containsKey("password") ? authObj.getString("password") : null;
         return new AuthUser(username, password);
     }
 }

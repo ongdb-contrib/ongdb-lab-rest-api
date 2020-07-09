@@ -85,7 +85,42 @@ query variables:
 ```
 {"data":{"createColumn":"Nodes created: 1\nProperties set: 1\nLabels added: 1\n"}}
 ```
+### POST /ongdb/graph/graphql/idl
+- 参数样例
+- GraphQL APP
+```
+graphql: 
+type Movie {
+  title: String!
+  released: Int
+  actors: [Person] @relation(name: "ACTED_IN", direction: IN)
+}
+type Person {
+  name: String!
+  born: Int
+  movies: [Movie] @relation(name: "ACTED_IN")
+}
 
+query variables:
+{
+  "username":"ongdb",
+  "password":"ongdb%dev"
+}
+```
+- HTTP APP
+```
+{
+    "query": "type Movie {  title: String!  released: Int  actors: [Person] @relation(name: \"ACTED_IN\", direction: IN)}type Person {  name: String!  born: Int  movies: [Movie] @relation(name: \"ACTED_IN\")}",
+    "variables": {
+        "username": "ongdb",
+        "password": "ongdb%dev"
+    }
+}
+```
+- 返回值
+```
+{"Movie":{"type":"Movie","description":null,"properties":{"title":{"fieldName":"title","type":{"name":"String","array":false,"nonNull":1,"enum":false,"inputType":false,"scalar":false,"basic":true},"id":true,"indexed":false,"cypher":null,"defaultValue":null,"unique":false,"enum":false,"parameters":null,"description":null,"graphQLId":false,"computed":false,"idProperty":true},"released":{"fieldName":"released","type":{"name":"Int","array":false,"nonNull":0,"enum":false,"inputType":false,"scalar":false,"basic":true},"id":false,"indexed":false,"cypher":null,"defaultValue":null,"unique":false,"enum":false,"parameters":null,"description":null,"graphQLId":false,"computed":false,"idProperty":false}},"relationships":{"actors":{"fieldName":"actors","type":"ACTED_IN","label":"Person","out":false,"multi":true,"cypher":null,"parameters":null,"description":null,"nonNull":0}},"labels":[],"interface":false},"Person":{"type":"Person","description":null,"properties":{"name":{"fieldName":"name","type":{"name":"String","array":false,"nonNull":1,"enum":false,"inputType":false,"scalar":false,"basic":true},"id":true,"indexed":false,"cypher":null,"defaultValue":null,"unique":false,"enum":false,"parameters":null,"description":null,"graphQLId":false,"computed":false,"idProperty":true},"born":{"fieldName":"born","type":{"name":"Int","array":false,"nonNull":0,"enum":false,"inputType":false,"scalar":false,"basic":true},"id":false,"indexed":false,"cypher":null,"defaultValue":null,"unique":false,"enum":false,"parameters":null,"description":null,"graphQLId":false,"computed":false,"idProperty":false}},"relationships":{"movies":{"fieldName":"movies","type":"ACTED_IN","label":"Movie","out":true,"multi":true,"cypher":null,"parameters":null,"description":null,"nonNull":0}},"labels":[],"interface":false}}
+```
 ### GET /ongdb/graphiql
 ```
 格式化GraphQL

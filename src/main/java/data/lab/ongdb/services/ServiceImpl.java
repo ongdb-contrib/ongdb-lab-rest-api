@@ -148,6 +148,24 @@ public class ServiceImpl implements Inter {
                     .toJSONString();
         }
     }
+
+    /**
+     * @param authUser :校验用户
+     * @param graphql     :schema参数
+     * @return
+     * @Description: TODO(创建GraphQL Schema)
+     */
+    @Override
+    public String executeGraphQLIdl(AuthUser authUser, String graphql) {
+        if (Register.isRegisterOk(authUser)) {
+            HttpProxyRequest proxyRequest = OngdbHeartBeat.request;
+            String resultStr = proxyRequest.httpPost("/graphql/idl/", graphql);
+            return resultStr;
+        } else {
+            return JSONObject.parseObject(JSON.toJSONString(new Result(new String[]{"Auth failed!"}, Result.ErrorCode.AUTH_NO.getCode())))
+                    .toJSONString();
+        }
+    }
 }
 
 

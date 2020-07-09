@@ -66,6 +66,13 @@ public interface Inter {
      */
     String executeGraphQLEx(AuthUser authUser, String graphql);
 
+    /**
+     * @param authUser:校验用户
+     * @param para:schema参数
+     * @return
+     * @Description: TODO(创建GraphQL Schema)
+     */
+    String executeGraphQLIdl(AuthUser authUser, String para);
 }
 
 
