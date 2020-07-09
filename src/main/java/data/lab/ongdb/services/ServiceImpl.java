@@ -92,7 +92,7 @@ public class ServiceImpl implements Inter {
     }
 
     /**
-     * @param authUser :校验用户
+     * @param authUser        :校验用户
      * @param cypherCondition
      * @return
      * @Description: TODO(查询后台任务)
@@ -112,6 +112,27 @@ public class ServiceImpl implements Inter {
         }
     }
 
+    /**
+     * @param graphql
+     * @return
+     * @Description: TODO(执行GraphQL)
+     */
+    public String executeGraphQL(String graphql) {
+        HttpProxyRequest proxyRequest = OngdbHeartBeat.request;
+        String resultStr = proxyRequest.httpPost("/graphql/", graphql);
+        return resultStr;
+    }
+
+    /**
+     * @param graphql
+     * @return
+     * @Description: TODO(执行GraphQL)
+     */
+    public String executeGraphQLEx(String graphql) {
+        HttpProxyRequest proxyRequest = OngdbHeartBeat.request;
+        String resultStr = proxyRequest.httpPost("/graphql/experimental/", graphql);
+        return resultStr;
+    }
 }
 
 

@@ -26,4 +26,6 @@ spring:
     static-path-pattern: /path/**
   resources:
     static-locations: classpath:/static/
+  jooq:
+    sql-dialect: POSTGRES
 

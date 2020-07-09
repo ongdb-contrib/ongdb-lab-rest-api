@@ -5,5 +5,5 @@
 - http://localhost:7424/ongdb/swagger-ui.html
 - https://localhost:7425/ongdb/swagger-ui.html
 
- 
+- http://localhost:7424/ongdb/graphiql 
 
