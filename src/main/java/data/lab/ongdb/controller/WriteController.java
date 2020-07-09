@@ -11,6 +11,7 @@ import data.lab.ongdb.etl.common.CRUD;
 import data.lab.ongdb.model.AuthUser;
 import data.lab.ongdb.result.Result;
 import data.lab.ongdb.services.ServiceImpl;
+import io.swagger.annotations.Api;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +29,7 @@ import java.util.LinkedHashMap;
 @Controller
 @RequestMapping("/write")
 @CrossOrigin(origins = "*", maxAge = 3600) // 为了支持跨源请求添加注解
+@Api(value = "read",description = "执行数据修改CYPHER")
 public class WriteController {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(ReadController.class);

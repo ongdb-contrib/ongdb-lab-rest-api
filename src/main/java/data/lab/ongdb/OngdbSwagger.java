@@ -51,15 +51,22 @@ public class OngdbSwagger {
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
                 /*页面标题*/
-                .title("DATA LAB GRAPH DB API - GRAPHQL AND RESTFUL API DOCUMENT")
+                .title("DATA LAB GRAPH DB API")
                 /*创建人*/
-                .contact(new Contact("Graph Developer", "#", "#"))
+                .contact(new Contact("Graph Developer", "http://10.0.186.30/pages/viewpage.action?pageId=59605068", "mayc01@jsfund.cn"))
+
+//                .extensions()
+                .license("Apache 2.0")
+                .licenseUrl("http://www.apache.org/licenses/LICENSE-2.0.html")
+                .termsOfServiceUrl("")
+
                 /*页面标题*/
                 .description(new StringBuilder()
                         /**********************基础描述**********************/
                         .append("DataLab - graph database organization.")
                         .append("\n")
-                        .append(apiDescription())
+                        .append(someDescription())
+//                        .append(apiDescription())
                         .toString())
                 /*版本号*/
                 .version("1.2")
@@ -73,6 +80,14 @@ public class OngdbSwagger {
      */
     private String apiDescription() {
         return FileUtil.readAllLine("doc" + File.separator + "REST-API.md", "UTF-8");
+    }
+    /**
+     * @param
+     * @return
+     * @Description: TODO(加载接口的所有详细说明)
+     */
+    private String someDescription() {
+        return FileUtil.readAllLine("doc" + File.separator + "description.md", "UTF-8");
     }
 }
 

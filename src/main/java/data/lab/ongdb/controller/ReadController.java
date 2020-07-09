@@ -10,6 +10,7 @@ import data.lab.ongdb.etl.common.CRUD;
 import data.lab.ongdb.model.AuthUser;
 import data.lab.ongdb.result.Result;
 import data.lab.ongdb.services.ServiceImpl;
+import io.swagger.annotations.Api;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +29,7 @@ import org.springframework.stereotype.Controller;
  * 支持跨源请求
  * **/
 @CrossOrigin(origins = "*", maxAge = 3600)
+@Api(value = "read",description = "执行只读CYPHER")
 public class ReadController {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(ReadController.class);

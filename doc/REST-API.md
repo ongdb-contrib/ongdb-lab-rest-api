@@ -35,11 +35,23 @@
 - 参数样例
 - GraphQL APP
 ```
-graphql: query {column(name:"ods.test_table.c1") {name}}
+graphql: 
+query {column(name:"ods.test_table.c1") {name}}
+query variables:
+{
+  "username":"ongdb",
+  "password":"ongdb%dev"
+}
 ```
 - HTTP APP
 ```
-{"query":"query {column(name:\"ods.test_table.c1\") {name}}","variables":null}
+{
+  "query": "query {column(name:\"ods.test_table.c1\") {name}}",
+  "variables": {
+    "username": "ongdb",
+    "password": "ongdb%dev"
+  }
+}
 ```
 - 返回值
 ```
@@ -49,11 +61,25 @@ graphql: query {column(name:"ods.test_table.c1") {name}}
 - 参数样例
 - GraphQL APP
 ```
-graphql: mutation {createColumn(name: "The Shape of Water")}
+graphql: 
+mutation {
+  createColumn(name: "The Shape of Water")
+}
+query variables:
+{
+  "username":"ongdb",
+  "password":"ongdb%dev"
+}
 ```
 - HTTP APP
 ```
-{"query":"mutation {\n  createColumn(name: \"The Shape of Water\")\n}\n","variables":null}
+{
+  "query": "mutation {\n  createColumn(name: \"The Shape of Water\")\n}\n",
+  "variables": {
+    "username": "ongdb",
+    "password": "ongdb%dev"
+  }
+}
 ```
 - 返回值
 ```
