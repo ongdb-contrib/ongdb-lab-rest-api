@@ -30,7 +30,7 @@ import org.springframework.stereotype.Controller;
  * 支持跨源请求
  * **/
 @CrossOrigin(origins = "*", maxAge = 3600)
-@Api(value = "read",description = "执行只读CYPHER")
+@Api(tags = "RESTFUL-READ",value = "read",description = "执行只读CYPHER")
 public class ReadController {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(ReadController.class);

@@ -30,7 +30,7 @@ import java.util.LinkedHashMap;
 @Controller
 @RequestMapping("/write")
 @CrossOrigin(origins = "*", maxAge = 3600) // 为了支持跨源请求添加注解
-@Api(value = "read",description = "执行数据修改CYPHER")
+@Api(tags = "RESTFUL-WRITE", value = "read", description = "执行数据修改CYPHER")
 public class WriteController {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(ReadController.class);
@@ -44,7 +44,7 @@ public class WriteController {
 
     @RequestMapping(value = "/hello", method = RequestMethod.GET)
     @ResponseBody
-    @ApiOperation(value = "HELLO WORLD",notes = "- 参数样例 - 无传入参数\n" +
+    @ApiOperation(value = "HELLO WORLD", notes = "- 参数样例 - 无传入参数\n" +
             "- 返回值样例\n" +
             "```\n" +
             "Hello world!\n" +
@@ -60,7 +60,7 @@ public class WriteController {
      */
     @RequestMapping(value = "/d/transaction/commit", method = RequestMethod.POST)
     @ResponseBody
-    @ApiOperation(value = "执行数据修改查询",notes = "- 参数样例\n" +
+    @ApiOperation(value = "执行数据修改查询", notes = "- 参数样例\n" +
             "```json\n" +
             "{\n" +
             "    \"statements\": [\n" +
@@ -123,7 +123,7 @@ public class WriteController {
      */
     @RequestMapping(value = "/d/transaction/commit/task", method = RequestMethod.POST)
     @ResponseBody
-    @ApiOperation(value = "使用WRITE请求提交后台一个查询任务并将结果集写入ONgDB【此请求集群暂时无法分发只能在LEADER执行】",notes = ">【使用此接口获取任务结果/ongdb/read/d/transaction/commit MATCH (n:TASKRESULTNODE) WHERE n.taskId IN ['yc-m-task-1-关系网络任务','yc-m-task-2-关系网络任务'] RETURN n】\n" +
+    @ApiOperation(value = "使用WRITE请求提交后台一个查询任务并将结果集写入ONgDB【此请求集群暂时无法分发只能在LEADER执行】", notes = ">【使用此接口获取任务结果/ongdb/read/d/transaction/commit MATCH (n:TASKRESULTNODE) WHERE n.taskId IN ['yc-m-task-1-关系网络任务','yc-m-task-2-关系网络任务'] RETURN n】\n" +
             ">任务ID的生成方式建议使用UUID\n" +
             "- 参数样例\n" +
             "```json\n" +

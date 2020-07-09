@@ -10,6 +10,7 @@ import data.lab.ongdb.model.AuthUser;
 import data.lab.ongdb.services.ServiceImpl;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.Tag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +29,7 @@ import org.springframework.web.bind.annotation.*;
  * 支持跨源请求
  * **/
 @CrossOrigin(origins = "*", maxAge = 3600)
-@Api(value = "GraphQL", description = "执行GraphQL: /ongdb/graphiql在这个端点访问GraphQL APP")
+@Api(tags = "GraphQL", value = "GraphQL", description = "执行GraphQL: /ongdb/graphiql在这个端点访问GraphQL APP")
 public class GraphController {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(GraphController.class);
