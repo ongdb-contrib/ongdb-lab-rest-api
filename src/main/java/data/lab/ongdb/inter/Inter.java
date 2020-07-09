@@ -49,6 +49,23 @@ public interface Inter {
      * @Description: TODO(查询后台任务)
      */
     Result executeManagerCypherByHttp(AuthUser authUser, JSONObject cypherCondition);
+
+    /**
+     * @param authUser:校验用户
+     * @param graphql
+     * @return
+     * @Description: TODO(修改数据)
+     */
+    String executeGraphQL(AuthUser authUser, String graphql);
+
+    /**
+     * @param authUser:校验用户
+     * @param graphql
+     * @return
+     * @Description: TODO(查询数据)
+     */
+    String executeGraphQLEx(AuthUser authUser, String graphql);
+
 }
 
 

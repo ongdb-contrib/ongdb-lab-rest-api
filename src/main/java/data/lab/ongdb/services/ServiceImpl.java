@@ -5,6 +5,7 @@ package data.lab.ongdb.services;
  *
  */
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import data.lab.ongdb.etl.common.CRUD;
 import data.lab.ongdb.etl.compose.NeoComposer;
@@ -113,25 +114,39 @@ public class ServiceImpl implements Inter {
     }
 
     /**
+     * @param authUser :校验用户
      * @param graphql
      * @return
      * @Description: TODO(执行GraphQL)
      */
-    public String executeGraphQL(String graphql) {
-        HttpProxyRequest proxyRequest = OngdbHeartBeat.request;
-        String resultStr = proxyRequest.httpPost("/graphql/", graphql);
-        return resultStr;
+    @Override
+    public String executeGraphQL(AuthUser authUser, String graphql) {
+        if (Register.isRegisterOk(authUser)) {
+            HttpProxyRequest proxyRequest = OngdbHeartBeat.request;
+            String resultStr = proxyRequest.httpPost("/graphql/", graphql);
+            return resultStr;
+        } else {
+            return JSONObject.parseObject(JSON.toJSONString(new Result(new String[]{"Auth failed!"}, Result.ErrorCode.AUTH_NO.getCode())))
+                    .toJSONString();
+        }
     }
 
     /**
+     * @param authUser :校验用户
      * @param graphql
      * @return
      * @Description: TODO(执行GraphQL)
      */
-    public String executeGraphQLEx(String graphql) {
-        HttpProxyRequest proxyRequest = OngdbHeartBeat.request;
-        String resultStr = proxyRequest.httpPost("/graphql/experimental/", graphql);
-        return resultStr;
+    @Override
+    public String executeGraphQLEx(AuthUser authUser, String graphql) {
+        if (Register.isRegisterOk(authUser)) {
+            HttpProxyRequest proxyRequest = OngdbHeartBeat.request;
+            String resultStr = proxyRequest.httpPost("/graphql/experimental/", graphql);
+            return resultStr;
+        } else {
+            return JSONObject.parseObject(JSON.toJSONString(new Result(new String[]{"Auth failed!"}, Result.ErrorCode.AUTH_NO.getCode())))
+                    .toJSONString();
+        }
     }
 }
 

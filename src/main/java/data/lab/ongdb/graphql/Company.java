@@ -1,11 +1,9 @@
-package data.lab.ongdb.graphql_test;
+package data.lab.ongdb.graphql;
 /*
  *
  * Data Lab - graph database organization.
  *
  */
-
-import java.util.Objects;
 
 /**
  * @author Yc-Ma

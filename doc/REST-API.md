@@ -33,8 +33,13 @@
 
 ### POST /ongdb/graph/graphql/experimental/
 - 参数样例
+- GraphQL APP
 ```
-query {column(name:"ods.test_table.c1") {name}}
+graphql: query {column(name:"ods.test_table.c1") {name}}
+```
+- HTTP APP
+```
+{"query":"query {column(name:\"ods.test_table.c1\") {name}}","variables":null}
 ```
 - 返回值
 ```
@@ -42,17 +47,20 @@ query {column(name:"ods.test_table.c1") {name}}
 ```
 ### POST /ongdb/graph/graphql/
 - 参数样例
+- GraphQL APP
 ```
-mutation {
-  createColumn(name: "The Shape of Water")
-}
+graphql: mutation {createColumn(name: "The Shape of Water")}
+```
+- HTTP APP
+```
+{"query":"mutation {\n  createColumn(name: \"The Shape of Water\")\n}\n","variables":null}
 ```
 - 返回值
 ```
 {"data":{"createColumn":"Nodes created: 1\nProperties set: 1\nLabels added: 1\n"}}
 ```
 
-### POST /ongdb/graphiql
+### GET /ongdb/graphiql
 ```
 格式化GraphQL
 ```

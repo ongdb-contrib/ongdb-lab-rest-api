@@ -51,7 +51,7 @@ public class OngdbSwagger {
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
                 /*页面标题*/
-                .title("DataLab图数据平台API服务 - ONgDB RESTFUL API DOCUMENT")
+                .title("DATA LAB GRAPH DB API - GRAPHQL AND RESTFUL API DOCUMENT")
                 /*创建人*/
                 .contact(new Contact("Graph Developer", "#", "#"))
                 /*页面标题*/
@@ -62,7 +62,7 @@ public class OngdbSwagger {
                         .append(apiDescription())
                         .toString())
                 /*版本号*/
-                .version("1.0")
+                .version("1.2")
                 .build();
     }
 

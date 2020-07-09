@@ -4,6 +4,9 @@ package data.lab.ongdb.controller;
  * Data Lab - graph database organization.
  *
  */
+
+import com.alibaba.fastjson.JSONObject;
+import data.lab.ongdb.model.AuthUser;
 import data.lab.ongdb.services.ServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,22 +40,51 @@ public class GraphController {
      * @param
      * @return
      * @Description: TODO(修改数据)
+     * {
+     * "query": "GraphQL",
+     * "variables": {
+     * "var1": "vakue",
+     * "var2": "vakue"
+     * }
+     * }
      */
     @RequestMapping(value = "/graphql", method = RequestMethod.POST)
     @ResponseBody
     public String hTransactionCommit(@RequestBody String para) {
-        return dataService.executeGraphQL(para);
+        AuthUser authUser = getAuthUser(para);
+        return dataService.executeGraphQL(authUser, para);
     }
 
     /**
      * @param
      * @return
      * @Description: TODO(查数据)
+     * {
+     * "query": "GraphQL",
+     * "variables": {
+     * "var1": "vakue",
+     * "var2": "vakue"
+     * }
+     * }
      */
     @RequestMapping(value = "/graphql/experimental", method = RequestMethod.POST)
     @ResponseBody
     public String executeGraphQlEx(@RequestBody String para) {
-        return dataService.executeGraphQLEx(para);
+        AuthUser authUser = getAuthUser(para);
+        return dataService.executeGraphQLEx(authUser, para);
+    }
+
+    /**
+     * @param
+     * @return
+     * @Description: TODO(封装校验的用户对象)
+     */
+    private AuthUser getAuthUser(String para) {
+        JSONObject paraObj = JSONObject.parseObject(para);
+        JSONObject authObj = paraObj.getJSONObject("variables");
+        String username = authObj.getString("username");
+        String password = authObj.getString("password");
+        return new AuthUser(username, password);
     }
 }
 
