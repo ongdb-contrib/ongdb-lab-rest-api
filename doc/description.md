@@ -9,10 +9,4 @@
 ### 用户验证方式
 均在请求参数中进行验证
 REQUEST AND GraphQL QUERY VARIABLES
-```
-{
-  "username":"ongdb",
-  "password":"ongdb%dev"
-}
-```
 
