@@ -447,7 +447,7 @@ public class ReadController {
      */
     @RequestMapping(value = "/h/transaction/commit", method = RequestMethod.POST)
     @ResponseBody
-    @ApiOperation(value = "【取消运行的任务】",notes = "-参数样例\n" +
+    @ApiOperation(value = "READ CYPHER提交接口",notes = "-参数样例\n" +
             "```json\n" +
             "{\n" +
             "    \"statements\": [\n" +
@@ -457,6 +457,18 @@ public class ReadController {
             "    ],\n" +
             "    \"user\":\"neo4j\",\n" +
             "    \"password\":\"123456\"\n" +
+            "}\n" +
+            "```\n" +
+            "```json\n" +
+            "{\n" +
+            "    \"statements\": [\n" +
+            "        {\n" +
+            "           \"resultDataContents\" : [ \"row\", \"graph\" ],\n" +
+            "            \"statement\": \"MATCH (n:HORGShareHold) RETURN n LIMIT 100\"\n" +
+            "        }\n" +
+            "    ],\n" +
+            "    \"user\":\"ongdb\",\n" +
+            "    \"password\":\"datalab%pro\"\n" +
             "}\n" +
             "```\n" +
             "-返回值样例\n" +
@@ -497,7 +509,7 @@ public class ReadController {
             "        \"errors\": []\n" +
             "    }\n" +
             "}\n" +
-            "```")
+            "```\n")
     public Result hTransactionCommit(@RequestBody JSONObject para) {
         Result result;
         try {

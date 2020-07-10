@@ -487,6 +487,18 @@ Hello world!
     "password":"123456"
 }
 ```
+```json
+{
+    "statements": [
+        {
+           "resultDataContents" : [ "row", "graph" ],
+            "statement": "MATCH (n:HORGShareHold) RETURN n LIMIT 100"
+        }
+    ],
+    "user":"ongdb",
+    "password":"datalab%pro"
+}
+```
 -返回值样例
 ```
 {
